@@ -1,8 +1,14 @@
-FROM httpd:latest
+# Use the official Apache HTTP Server image with version 2.4.57
+FROM httpd:2.4.57
+
+# Expose port 15100 for HTTP
 EXPOSE 15100
 
 # Install wget to download the image
 RUN apt-get update && apt-get install -y wget
 
-# Download your business card image and copy it to the Apache document root
-RUN wget -O /usr/local/apache2/htdocs/CARD.jpg https://github.com/Ignejoneigne/Docker_task_D4ML/raw/main/CARD.jpg
+# Copy your business card image from the local source directory to the Apache document root
+COPY CARD.jpg /usr/local/apache2/htdocs/
+
+# Start the Apache server
+CMD ["httpd-foreground"]
