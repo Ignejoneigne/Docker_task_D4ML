@@ -1,7 +1,7 @@
 # Define environment variables
-export MY_PUBLIC_IP="5.20.132.172" 
+export MY_PUBLIC_IP="5.20.132.172"
 export INSTANCE_PUBLIC_IP="3.77.57.82"
-export SECURITY_GROUP_ID="sg-0f4dd6849aa4dc0ab" 
+export SECURITY_GROUP_ID="sg-0f4dd6849aa4dc0ab"
 export APACHE_VERSION="2.4.57"
 export CARD_IMAGE_URL="https://github.com/Ignejoneigne/Docker_task_D4ML/raw/main/CARD.jpg"
 
@@ -19,9 +19,6 @@ sudo systemctl start apache2
 # Enable Apache to start on boot
 sudo systemctl enable apache2
 
-# Pin Apache to the specified version
-sudo apt-mark hold apache2
-
 # Install Docker (if not already installed)
 # sudo apt-get install -y docker.io
 
@@ -30,12 +27,21 @@ sudo mkdir my-apache-container
 
 # Create a Dockerfile for your Apache container
 sudo cat <<EOL > Dockerfile
-FROM httpd:$APACHE_VERSION
+
+# Use the official Apache HTTP Server image as the base image
+FROM httpd:latest
+
+# Expose port 15100 for HTTP
 EXPOSE 15100
-# Install wget to download the image
+
+# Install wget to download the image (if needed)
 RUN apt-get update && apt-get install -y wget
-# Download your business card image and copy it to the Apache document root
-RUN wget -O /usr/local/apache2/htdocs/CARD.jpg $CARD_IMAGE_URL
+
+# Copy the "CARD.jpg" image from the local source directory to the Apache document root
+COPY CARD.jpg /usr/local/apache2/htdocs/
+
+# Start the Apache server
+CMD ["httpd-foreground"]
 EOL
 
 # Build the Docker image
