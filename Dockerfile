@@ -1,5 +1,5 @@
-# Use the official Apache HTTP Server image with version 2.4.57
-FROM httpd:2.4.57
+# Use the official Apache HTTP Server image with latest version
+FROM httpd:latest
 
 # Expose port 15100 for HTTP
 EXPOSE 15100
